@@ -17,20 +17,20 @@ BACI_PATH = os.path.join(BASE_DIR, "baci_85_sample.csv")
 COUNTRY_PATH = os.path.join(BASE_DIR, "country_codes_sample.csv")
 
 # ----------------------------------------------------
-# 2. 한글 폰트 설정 (fonts 폴더 내 폰트 우선 적용)
+# 2. 한글 폰트 설정 (폰트 정식 등록으로 네모 깨짐 방지)
 # ----------------------------------------------------
-plt.rcParams["axes.unicode_minus"] = False
+plt.rcParams["axes.unicode_minus"] = False  # 마이너스 부호 깨짐 방지
+
 font_path = os.path.join(BASE_DIR, "fonts", "온글잎 콘콘체.ttf")
+if not os.path.exists(font_path):
+    font_path = os.path.join(BASE_DIR, "..", "fonts", "온글잎 콘콘체.ttf")
 
 if os.path.exists(font_path):
-    font_prop = fm.FontProperties(fname=font_path)
-    plt.rc("font", family=font_prop.get_name())
+    fm.fontManager.addfont(font_path)
+    font_name = fm.FontProperties(fname=font_path).get_name()
+    plt.rc("font", family=font_name)
 else:
-    alt_font = os.path.join(BASE_DIR, "..", "fonts", "온글잎 콘콘체.ttf")
-    if os.path.exists(alt_font):
-        font_prop = fm.FontProperties(fname=alt_font)
-        plt.rc("font", family=font_prop.get_name())
-    elif os.name == "nt":
+    if os.name == "nt":
         plt.rc("font", family="Malgun Gothic")
     else:
         plt.rc("font", family="AppleGothic")
@@ -41,7 +41,6 @@ else:
 # ----------------------------------------------------
 @st.cache_data
 def load_and_preprocess_data():
-    # 파일 로드 (UTF-8 및 CP949 인코딩 대응)
     try:
         baci_df = pd.read_csv(BACI_PATH, encoding="utf-8")
         country_df = pd.read_csv(COUNTRY_PATH, encoding="utf-8")
@@ -55,8 +54,7 @@ def load_and_preprocess_data():
     baci_df.columns = [str(c).strip().lower() for c in baci_df.columns]
     country_df.columns = [str(c).strip().lower() for c in country_df.columns]
 
-    # [핵심 수정] 상대국 코드 컬럼 매칭 ('j' 컬럼 기준 병합)
-    # country_codes_sample.csv의 'j'와 baci_85_sample.csv의 'j'를 연결
+    # 상대국 코드('j') 기준 병합
     target_key = "j" if "j" in country_df.columns else country_df.columns[0]
     name_col = (
         "country_name"
@@ -77,7 +75,6 @@ def load_and_preprocess_data():
         how="left",
     )
 
-    # 국가명이 없는 경우 국가 코드로 표기
     merged_df["country_name"] = merged_df[name_col].fillna(
         "국가코드_" + merged_df["j"].astype(str)
     )
@@ -116,7 +113,7 @@ raw_baci, df = load_and_preprocess_data()
 # ----------------------------------------------------
 st.sidebar.header("🔍 검색 및 필터 옵션")
 
-# 실제 데이터 안에 있는 국가명 리스트 추출
+# 국가 선택
 all_countries = sorted([str(x) for x in df["country_name"].unique()])
 selected_countries = st.sidebar.multiselect(
     "국가 선택 (복수 선택 가능, 미선택 시 전체)",
@@ -124,7 +121,7 @@ selected_countries = st.sidebar.multiselect(
     default=[],
 )
 
-# 무역액 등급 선택 (대/중/소)
+# 등급 선택
 tier_options = ["대", "중", "소"]
 selected_tiers = st.sidebar.multiselect(
     "무역액 등급 선택 (대/중/소)", options=tier_options, default=tier_options
@@ -140,7 +137,7 @@ if selected_tiers:
     filtered_df = filtered_df[filtered_df["무역액등급"].isin(selected_tiers)]
 
 # ----------------------------------------------------
-# 5. 메인 화면 출력
+# 5. 오른쪽 메인 화면 출력
 # ----------------------------------------------------
 
 # 1) 타이틀
@@ -185,7 +182,6 @@ col_chart1, col_chart2 = st.columns(2)
 with col_chart1:
     st.markdown("##### 🌐 국가*연도 수출액 히트맵(상위8 개국)")
     if not filtered_df.empty:
-        # 상위 8개국 추출
         top8_countries = (
             filtered_df.groupby("country_name")["trade_value_usd"]
             .sum()

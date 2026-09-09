@@ -7,87 +7,13 @@ import seaborn as sns
 import streamlit as st
 
 # ----------------------------------------------------
-# 1. 페이지 기본 설정 및 스타일 커스텀 (CSS)
+# 1. 페이지 기본 설정 및 경로
 # ----------------------------------------------------
 st.set_page_config(
     page_title="무역 분석 대시보드",
-    page_icon="🧊",
+    page_icon="✈️",
     layout="wide",
     initial_sidebar_state="expanded",
-)
-
-# 파스텔 블루 테마 및 부드러운 카드 UI 스타일 주입
-st.markdown(
-    """
-    <style>
-    /* 전체 배경: 은은한 파스텔 블루 그라데이션 */
-    .stApp {
-        background: linear-gradient(135deg, #F0F6FC 0%, #E3EDF7 100%);
-        color: #2D3748;
-    }
-    
-    /* 사이드바 배경 */
-    [data-testid="stSidebar"] {
-        background-color: #EBF3FA !important;
-        border-right: 1px solid #D1E2F2;
-    }
-    
-    /* 메인 타이틀 장식 */
-    .main-title {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #1E3A8A;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        margin-bottom: 0.2rem;
-    }
-    .sub-desc {
-        color: #4B6584;
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* 섹션 헤더 스타일 */
-    h3 {
-        color: #1E3A8A !important;
-        font-weight: 600 !important;
-        padding-top: 0.5rem;
-    }
-    h5 {
-        color: #2C3E50 !important;
-        font-weight: 600 !important;
-    }
-
-    /* 지표 카드 커스텀 (Glassmorphism 스타일) */
-    div[data-testid="stMetric"] {
-        background-color: rgba(255, 255, 255, 0.75);
-        border: 1px solid #D0E1FD;
-        padding: 18px 24px;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(30, 64, 175, 0.05);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    div[data-testid="stMetric"]:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(30, 64, 175, 0.1);
-    }
-    div[data-testid="stMetricLabel"] p {
-        font-size: 0.95rem !important;
-        color: #576574 !important;
-        font-weight: 600 !important;
-    }
-    div[data-testid="stMetricValue"] div {
-        color: #1E3A8A !important;
-        font-weight: 700 !important;
-    }
-
-    /* 구분선 연하게 */
-    hr {
-        border-color: #D1E2F2 !important;
-        margin: 1.8rem 0 !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -95,7 +21,7 @@ BACI_PATH = os.path.join(BASE_DIR, "baci_85_sample.csv")
 COUNTRY_PATH = os.path.join(BASE_DIR, "country_codes_sample.csv")
 
 # ----------------------------------------------------
-# 2. 한글 폰트 설정 (fonts 폴더 내 폰트 등록)
+# 2. 한글 폰트 설정 (오류 없는 경량 로드)
 # ----------------------------------------------------
 plt.rcParams["axes.unicode_minus"] = False
 
@@ -113,9 +39,79 @@ else:
     else:
         plt.rc("font", family="AppleGothic")
 
+# ----------------------------------------------------
+# 3. CSS 스타일링 (멈춤 없는 안전한 파스텔 블루 테마)
+# ----------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* 전체 배경: 은은한 파스텔 블루 */
+    .stApp {
+        background: linear-gradient(135deg, #F0F6FC 0%, #E2EDF8 100%);
+        color: #1A365D;
+    }
+
+    /* 사이드바 스타일 */
+    [data-testid="stSidebar"] {
+        background-color: #E8F2FA !important;
+        border-right: 1px solid #CFE2F3;
+    }
+
+    /* 메인 타이틀 */
+    .title-container {
+        padding: 10px 0;
+    }
+    .main-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #0C3C78;
+    }
+    .sub-desc {
+        color: #3E6B99;
+        font-size: 1rem;
+        margin-top: 4px;
+        margin-bottom: 20px;
+    }
+
+    /* 지표 카드 커스텀 (높은 수치는 짙은 블루 강조) */
+    div[data-testid="stMetric"] {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1.5px solid #BDD7EE;
+        border-radius: 14px;
+        padding: 16px 20px;
+        box-shadow: 0 4px 12px rgba(12, 60, 120, 0.05);
+    }
+    div[data-testid="stMetricLabel"] p {
+        font-size: 0.95rem !important;
+        color: #4A6572 !important;
+        font-weight: 600 !important;
+    }
+    div[data-testid="stMetricValue"] div {
+        color: #0A3670 !important;
+        font-size: 1.8rem !important;
+        font-weight: 800 !important;
+    }
+
+    /* 섹션 제목 */
+    h3, h5 {
+        color: #0D3B66 !important;
+        font-weight: 700 !important;
+    }
+
+    /* 테이블 영역 */
+    [data-testid="stDataFrame"] {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        padding: 4px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 # ----------------------------------------------------
-# 3. 데이터 로드 및 전처리
+# 4. 데이터 로드 및 전처리
 # ----------------------------------------------------
 @st.cache_data
 def load_and_preprocess_data():
@@ -182,15 +178,15 @@ def load_and_preprocess_data():
 raw_baci, df = load_and_preprocess_data()
 
 # ----------------------------------------------------
-# 4. 사이드바 필터 (파스텔 톤에 어울리는 간결한 UI)
+# 5. 사이드바 필터
 # ----------------------------------------------------
 with st.sidebar:
-    st.markdown("### 🔎 필터 컨트롤")
-    st.caption("원하는 조건으로 데이터를 즉시 탐색하세요.")
+    st.markdown("### ✈️ 글로벌 필터 옵션")
+    st.caption("국가 및 무역 규모별 데이터를 필터링합니다.")
 
     all_countries = sorted([str(x) for x in df["country_name"].unique()])
     selected_countries = st.multiselect(
-        "국가 선택 (복수 선택 가능)",
+        "🌐 국가 선택 (다중 선택 가능)",
         options=all_countries,
         default=[],
         placeholder="전체 국가 표시 중...",
@@ -198,7 +194,7 @@ with st.sidebar:
 
     tier_options = ["대", "중", "소"]
     selected_tiers = st.multiselect(
-        "무역액 등급 선택 (대/중/소)",
+        "📊 무역액 등급 선택 (대/중/소)",
         options=tier_options,
         default=tier_options,
     )
@@ -212,16 +208,17 @@ if selected_tiers:
     filtered_df = filtered_df[filtered_df["무역액등급"].isin(selected_tiers)]
 
 # ----------------------------------------------------
-# 5. 오른쪽 메인 화면 출력
+# 6. 메인 화면 출력
 # ----------------------------------------------------
 
-# 1) 타이틀 영역
+# 1) 타이틀 (안전한 이모지 & 텍스트)
 st.markdown(
-    '<div class="main-title">🚢 무역 분석 대시보드</div>',
-    unsafe_allow_html=True,
-)
-st.markdown(
-    '<div class="sub-desc">HS 85 품목(반도체/전자부품) 글로벌 수출입 동향 및 국가별 실적 모니터링</div>',
+    """
+    <div class="title-container">
+        <div class="main-title">🌍 무역 분석 대시보드 ✈️</div>
+        <div class="sub-desc">반도체 및 전자부품(HS 85) 글로벌 교역 흐름 모니터링 시스템</div>
+    </div>
+    """,
     unsafe_allow_html=True,
 )
 st.markdown("---")
@@ -240,7 +237,7 @@ null_df = pd.DataFrame(
 st.dataframe(null_df, use_container_width=True, height=180)
 st.markdown("---")
 
-# 3) 거래 실적 요약 카드
+# 3) 총거래건수 & 총수출액(달러)
 st.subheader("3. 거래 실적 요약")
 total_transactions = len(filtered_df)
 total_export_value = filtered_df["trade_value_usd"].sum()
@@ -248,16 +245,16 @@ total_export_value = filtered_df["trade_value_usd"].sum()
 col1, col2 = st.columns(2)
 with col1:
     st.metric(
-        label="📦 총 거래건수", value=f"{total_transactions:,} 건"
+        label="📦 총거래건수", value=f"{total_transactions:,} 건"
     )
 with col2:
     st.metric(
-        label="💵 총 수출액 (USD)",
+        label="💵 총수출액 (달러)",
         value=f"${total_export_value:,.0f}",
     )
 st.markdown("---")
 
-# 4) 시각화 구역 (히트맵 & 등급 분포)
+# 4) 시각화 (상위 8개국 히트맵 & 무역액 등급분포)
 st.subheader("4. 국가별 및 등급별 무역 패턴 분석")
 col_chart1, col_chart2 = st.columns(2)
 
@@ -282,24 +279,24 @@ with col_chart1:
                 aggfunc="sum",
             ).fillna(0)
 
-            # 파스텔 톤에 어울리는 투명 배경 + 부드러운 블루 컬러맵
             fig, ax = plt.subplots(figsize=(6, 4.5))
             fig.patch.set_alpha(0.0)
             ax.patch.set_alpha(0.0)
 
+            # 높은 수치일수록 진한 파랑 강조 (YlGnBu)
             sns.heatmap(
                 pivot_heat,
-                cmap="PuBu",
+                cmap="YlGnBu",
                 annot=False,
                 fmt=",.0f",
                 cbar=True,
                 linewidths=0.5,
-                linecolor="#E3EDF7",
+                linecolor="#FFFFFF",
                 ax=ax,
             )
-            ax.set_title("상위 8개국 연도별 수출액", fontsize=12, pad=10)
-            ax.set_xlabel("연도", fontsize=10)
-            ax.set_ylabel("국가명", fontsize=10)
+            ax.set_title("상위 8개국 연도별 수출액", fontsize=11, color="#0C3C78")
+            ax.set_xlabel("연도", fontsize=10, color="#2C3E50")
+            ax.set_ylabel("국가명", fontsize=10, color="#2C3E50")
             st.pyplot(fig)
         else:
             st.info("표시할 히트맵 데이터가 없습니다.")
@@ -320,28 +317,28 @@ with col_chart2:
         fig2.patch.set_alpha(0.0)
         ax2.patch.set_alpha(0.0)
 
-        # 세련된 파스텔 3색 (스카이블루, 민트, 피치)
-        colors = ["#5B9BD5", "#70C1B3", "#F39C12"]
+        # 높은 무역액 '대'는 진한 블루(#0D47A1)
+        bar_colors = ["#0D47A1", "#42A5F5", "#90CAF9"]
         bars = ax2.bar(
             tier_counts.index,
             tier_counts.values,
-            color=colors,
-            width=0.55,
+            color=bar_colors,
+            width=0.52,
             edgecolor="#FFFFFF",
             linewidth=1.2,
         )
-        ax2.set_title(
-            "무역액 등급별 분포 (대 / 중 / 소)", fontsize=12, pad=10
-        )
-        ax2.set_xlabel("등급", fontsize=10)
-        ax2.set_ylabel("거래건수", fontsize=10)
 
-        # 격자선 및 테두리 정리
+        ax2.set_title(
+            "무역액 등급별 분포 (대: 진한 파랑)", fontsize=11, color="#0C3C78"
+        )
+        ax2.set_xlabel("등급", fontsize=10, color="#2C3E50")
+        ax2.set_ylabel("거래건수", fontsize=10, color="#2C3E50")
+
         ax2.spines["top"].set_visible(False)
         ax2.spines["right"].set_visible(False)
-        ax2.spines["left"].set_color("#BDC3C7")
-        ax2.spines["bottom"].set_color("#BDC3C7")
-        ax2.yaxis.grid(True, linestyle="--", alpha=0.5, color="#D0D7DE")
+        ax2.spines["left"].set_color("#BDD7EE")
+        ax2.spines["bottom"].set_color("#BDD7EE")
+        ax2.yaxis.grid(True, linestyle="--", alpha=0.4, color="#BDD7EE")
         ax2.set_axisbelow(True)
 
         for bar in bars:
@@ -354,7 +351,7 @@ with col_chart2:
                 va="bottom",
                 fontsize=10,
                 fontweight="bold",
-                color="#34495E",
+                color="#0D47A1",
             )
         st.pyplot(fig2)
     else:

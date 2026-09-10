@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TABI (旅) - 일본 감성 여행 가이드</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts (Noto Sans KR & Montserrat) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'Montserrat', 'sans-serif'],
+            display: ['Montserrat', '"Noto Sans KR"', 'sans-serif']
+          },
+          colors: {
+            sakura: {
+              50: '#fff5f6',
+              100: '#ffe8ec',
+              200: '#fed5dd',
+              500: '#e15b76',
+              600: '#d03b5a',
+            },
+            fuji: {
+              50: '#f0f5ff',
+              100: '#e0ebfe',
+              500: '#2b5ea7',
+              900: '#15294a'
+            },
+            matcha: {
+              100: '#eaf4e8',
+              500: '#588157',
+              700: '#3a5a40'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .hero-gradient {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.85) 100%);
+    }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .card-shadow {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+    }
+    .card-shadow:hover {
+      box-shadow: 0 20px 30px -10px rgba(225, 91, 118, 0.15), 0 10px 15px -5px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-sakura-100 selection:text-sakura-600">
+
+  <header class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-slate-200/70 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-full bg-sakura-500 text-white flex items-center justify-center font-bold text-sm shadow-sm group-hover:rotate-12 transition-transform">
+          旅
+        </span>
+        <span class="font-display font-extrabold text-xl tracking-tight text-slate-900">
+          TABI <span class="text-xs font-normal text-sakura-500 ml-1 px-1.5 py-0.5 bg-sakura-50 rounded">JAPAN</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#cities" class="hover:text-sakura-500 transition-colors">주요 도시</a>
+        <a href="#theme-routes" class="hover:text-sakura-500 transition-colors">추천 테마</a>
+        <a href="#budget-tool" class="hover:text-sakura-500 transition-colors">환율 & 경비 계산기</a>
+        <a href="#checklist" class="hover:text-sakura-500 transition-colors">여행 체크리스트</a>
+      </nav>
+
+      <!-- Bookmark button & mobile toggle -->
+      <div class="flex items-center gap-3">
+        <button id="bookmarkNavBtn" onclick="toggleBookmarkDrawer()" class="relative p-2 text-slate-600 hover:text-sakura-500 hover:bg-sakura-50 rounded-full transition-colors" title="저장한 명소 목록">
+          <i class="fa-solid fa-heart text-lg"></i>
+          <span id="bookmarkBadge" class="absolute -top-1 -right-1 bg-sakura-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+
+        <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none" aria-label="메뉴 열기">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 bg-white/95 px-6 py-4 space-y-3 text-sm font-medium">
+      <a href="#cities" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 hover:text-sakura-500">주요 도시 가이드</a>
+      <a href="#theme-routes" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 hover:text-sakura-500">추천 테마</a>
+      <a href="#budget-tool" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 hover:text-sakura-500">환율 & 경비 계산기</a>
+      <a href="#checklist" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 hover:text-sakura-500">여행 체크리스트</a>
+    </div>
+  </header>
+
+  <main class="pt-16">
+    <section class="relative min-h-[580px] lg:min-h-[640px] flex items-center justify-center overflow-hidden">
+      <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop" 
+           alt="후지산과 벚꽃" 
+           class="absolute inset-0 w-full h-full object-cover object-center"
+           onerror="this.src='https://placehold.co/1920x1080/2b3a4a/ffffff?text=Travel+To+Japan'">
+      <div class="absolute inset-0 hero-gradient"></div>
+
+      <div class="relative max-w-5xl mx-auto px-4 text-center text-white py-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs sm:text-sm font-medium tracking-wide mb-6">
+          <span class="w-2 h-2 rounded-full bg-sakura-500 animate-pulse"></span>
+          설레는 사계절, 나만의 일본 여행 찾기
+        </div>
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight sm:leading-tight mb-6">
+          천천히 걷고 깊이 느끼는<br class="hidden sm:inline"> 일본의 모든 순간
+        </h1>
+        <p class="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-slate-200 font-light mb-10 leading-relaxed">
+          화려한 도쿄의 골목부터 고즈넉한 교토의 정원, 미식의 오사카까지.<br class="hidden sm:inline">
+          여행 계획부터 현지 꿀팁과 환율 계산까지 한눈에 확인하세요.
+        </p>
+
+        <!-- Quick Search / Filter buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-2.5 max-w-3xl mx-auto">
+          <button onclick="filterByCity('all')" class="quick-filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white text-slate-900 shadow-sm transition hover:scale-105" data-filter="all">
+            전체 보기
+          </button>
+          <button onclick="filterByCity('tokyo')" class="quick-filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition hover:scale-105" data-filter="tokyo">
+            🗼 도쿄
+          </button>
+          <button onclick="filterByCity('osaka')" class="quick-filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition hover:scale-105" data-filter="osaka">
+            🐙 오사카
+          </button>
+          <button onclick="filterByCity('kyoto')" class="quick-filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition hover:scale-105" data-filter="kyoto">
+            ⛩️ 교토
+          </button>
+          <button onclick="filterByCity('fukuoka')" class="quick-filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition hover:scale-105" data-filter="fukuoka">
+            🍜 후쿠오카
+          </button>
+          <button onclick="filterByCity('sapporo')" class="quick-filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition hover:scale-105" data-filter="sapporo">
+            ❄️ 삿포로
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-7 relative z-20">
+      <div class="bg-white rounded-2xl p-4 sm:p-6 card-shadow border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
+          <div class="w-12 h-12 rounded-xl bg-sakura-50 text-sakura-500 flex items-center justify-center text-2xl shrink-0">
+            <i class="fa-solid fa-passport"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-sm sm:text-base">2026 일본 여행 준비 필수 사항</h4>
+            <p class="text-xs sm:text-sm text-slate-500">Visit Japan Web 등록(QR 입국심사), 110V 돼지코 어댑터, IC 교통카드(스이카/이코카)</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+          <a href="#checklist" class="w-full md:w-auto text-center px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-medium transition shadow-sm">
+            준비물 체크리스트 보기
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="cities" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-bold text-sakura-500 uppercase tracking-widest">Destinations</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">인기 여행지 큐레이션</h2>
+          <p class="text-sm text-slate-500 mt-1">지역별 대표 명소와 즐길거리를 한 번에 둘러보세요.</p>
+        </div>
+
+        <!-- Category Tag Filter Buttons -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterByTag('all')" class="tag-btn active px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-900 text-white transition">전체</button>
+          <button onclick="filterByTag('힐링')" class="tag-btn px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-600 transition">#힐링</button>
+          <button onclick="filterByTag('미식')" class="tag-btn px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-600 transition">#미식</button>
+          <button onclick="filterByTag('쇼핑')" class="tag-btn px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-600 transition">#쇼핑</button>
+          <button onclick="filterByTag('전통')" class="tag-btn px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-600 transition">#전통</button>
+        </div>
+      </div>
+
+      <!-- Grid Container for Places -->
+      <div id="placesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- Cards will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <section id="theme-routes" class="bg-slate-100/70 border-y border-slate-200/80 py-16 sm:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-xs font-bold text-sakura-500 uppercase tracking-widest">Travel Themes</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">취향대로 떠나는 테마 코스</h2>
+          <p class="text-sm text-slate-600 mt-2">여행자의 여행 스타일과 동행자에 맞춘 완벽한 루트를 제안합니다.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Theme 1 -->
+          <div class="bg-white rounded-2xl overflow-hidden card-shadow border border-slate-200/60 p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-utensils"></i>
+              </div>
+              <span class="text-xs font-semibold text-amber-600 uppercase tracking-wide">3박 4일 미식투어</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-2">오사카 & 교토 먹킷리스트 탐방</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                도톤보리 타코야키부터 우메다 스시, 니시키 시장의 당고와 말차 파르페까지 일본 관서 지방의 대표 맛집을 정복하는 알짜배기 코스.
+              </p>
+              <ul class="text-xs text-slate-500 space-y-2 border-t border-slate-100 pt-3">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 오사카 도톤보리 & 쿠로몬 시장</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 우지 말차 카페거리 & 기온 전통 찻집</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 한큐 패스로 떠나는 근교 미식 여행</li>
+              </ul>
+            </div>
+            <button onclick="quickSelectTheme('osaka')" class="mt-6 w-full py-2.5 rounded-xl border border-slate-200 hover:border-sakura-500 hover:text-sakura-500 text-xs font-semibold transition text-slate-700">
+              관련 명소 모아보기
+            </button>
+          </div>
+
+          <!-- Theme 2 -->
+          <div class="bg-white rounded-2xl overflow-hidden card-shadow border border-slate-200/60 p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-sakura-50 text-sakura-500 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-torii-gate"></i>
+              </div>
+              <span class="text-xs font-semibold text-sakura-500 uppercase tracking-wide">4박 5일 감성 & 힐링</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-2">교토의 고요함 & 아라시야마 대숲</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                사계절 자연과 천년 역사가 숨 쉬는 사찰, 푸른 대나무 숲길을 걸으며 복잡한 도심을 떠나 마음을 차분히 정돈하는 힐링 여정.
+              </p>
+              <ul class="text-xs text-slate-500 space-y-2 border-t border-slate-100 pt-3">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 아라시야마 치쿠린 & 토게츠교 산책</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 후시미 이나리 붉은 도리이 터널길</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 료칸 전통 가이세키 요리 및 온천욕</li>
+              </ul>
+            </div>
+            <button onclick="quickSelectTheme('kyoto')" class="mt-6 w-full py-2.5 rounded-xl border border-slate-200 hover:border-sakura-500 hover:text-sakura-500 text-xs font-semibold transition text-slate-700">
+              관련 명소 모아보기
+            </button>
+          </div>
+
+          <!-- Theme 3 -->
+          <div class="bg-white rounded-2xl overflow-hidden card-shadow border border-slate-200/60 p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-fuji-500 flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-city"></i>
+              </div>
+              <span class="text-xs font-semibold text-fuji-500 uppercase tracking-wide">3박 4일 시티 라이프</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-2">도쿄 트렌드 & 감성 카페 골목</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                시부야의 활기와 나카메구로의 아늑한 메구로강 카페거리, 긴자의 럭셔리 쇼핑과 시부야 스카이의 환상적인 야경 전망.
+              </p>
+              <ul class="text-xs text-slate-500 space-y-2 border-t border-slate-100 pt-3">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 시부야 스카이 일몰 및 야경 감상</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 오모테산도 & 다이칸야마 셀렉트숍</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-sakura-500"></i> 아사쿠사 센소지 전통 거리 기모노 체험</li>
+              </ul>
+            </div>
+            <button onclick="quickSelectTheme('tokyo')" class="mt-6 w-full py-2.5 rounded-xl border border-slate-200 hover:border-sakura-500 hover:text-sakura-500 text-xs font-semibold transition text-slate-700">
+              관련 명소 모아보기
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="budget-tool" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold text-sakura-500 uppercase tracking-widest">Calculator & Budget</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">엔화 환율 & 예상 여행 경비 계산기</h2>
+        <p class="text-sm text-slate-600 mt-2">간편한 환율 변환과 인원·일수에 따른 현실적인 예상 경비를 계산해보세요.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Currency Converter Box -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-6 sm:p-8 card-shadow border border-slate-200/80">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-coins text-sakura-500"></i> 실시간 기준 환율 계산
+            </h3>
+            <span class="text-xs px-2.5 py-1 rounded bg-slate-100 text-slate-500 font-mono">100 JPY ≈ <span id="rateLabel">910</span> KRW</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5">일본 엔화 (JPY ¥)</label>
+              <div class="relative">
+                <input type="number" id="jpyInput" value="10000" min="0" step="100" class="w-full pl-4 pr-12 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sakura-500/20 focus:border-sakura-500 font-bold text-slate-800 text-lg">
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">¥</span>
+              </div>
+            </div>
+
+            <div class="flex justify-center -my-1">
+              <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-arrow-down-up"></i>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5">대한민국 원화 (KRW ₩)</label>
+              <div class="relative">
+                <input type="text" id="krwOutput" readonly class="w-full pl-4 pr-12 py-3 rounded-xl bg-slate-50 border border-slate-200 font-bold text-slate-900 text-lg">
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">₩</span>
+              </div>
+            </div>
+
+            <!-- Custom Rate Adjustment -->
+            <div class="pt-3">
+              <div class="flex justify-between text-xs text-slate-500 mb-1">
+                <span>적용 환율 설정 (100엔당)</span>
+                <span class="font-semibold text-slate-700" id="customRateDisplay">910 원</span>
+              </div>
+              <input type="range" id="rateSlider" min="800" max="1100" value="910" step="5" class="w-full accent-sakura-500 cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                <span>800원</span>
+                <span>950원</span>
+                <span>1,100원</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trip Budget Estimator -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 card-shadow border border-slate-200/80">
+          <h3 class="font-bold text-slate-900 mb-6 pb-4 border-b border-slate-100 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-sakura-500"></i> 1인 기준 추천 예상 경비 시뮬레이터
+            </span>
+            <span class="text-xs text-slate-400 font-normal">항공/숙소/식비/교통 포함</span>
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">여행 기간</label>
+              <select id="budgetDays" onchange="calculateTripBudget()" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-medium focus:ring-2 focus:ring-sakura-500/20 focus:border-sakura-500">
+                <option value="3">2박 3일 (초단기 힐링)</option>
+                <option value="4" selected>3박 4일 (가장 대중적인 코스)</option>
+                <option value="5">4박 5일 (근교 포함 넉넉한 일정)</option>
+                <option value="7">6박 7일 (종단 및 깊이 있는 여행)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">여행 스타일</label>
+              <select id="budgetStyle" onchange="calculateTripBudget()" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-medium focus:ring-2 focus:ring-sakura-500/20 focus:border-sakura-500">
+                <option value="budget">가성비 여행 (비즈니스호텔/대중교통)</option>
+                <option value="standard" selected>스탠다드 여행 (인기 맛집/4성급 호텔)</option>
+                <option value="luxury">럭셔리 여행 (고급 료칸/미식 코스)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Budget Breakdown Result Card -->
+          <div class="bg-sakura-50/50 rounded-xl p-5 border border-sakura-100">
+            <div class="flex items-baseline justify-between mb-4">
+              <span class="text-sm font-semibold text-slate-700">총 예상 여행 경비 (1인)</span>
+              <div class="text-right">
+                <span id="totalBudgetKrw" class="text-2xl sm:text-3xl font-extrabold text-sakura-600">약 850,000</span>
+                <span class="text-sm font-bold text-slate-700">원</span>
+              </div>
+            </div>
+
+            <!-- Detailed itemized progress / breakdown -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-sakura-200/50 text-center">
+              <div class="p-2.5 bg-white rounded-lg border border-slate-100">
+                <div class="text-[11px] text-slate-400">항공권</div>
+                <div id="flightCost" class="font-bold text-xs sm:text-sm text-slate-800 mt-0.5">300,000원</div>
+              </div>
+              <div class="p-2.5 bg-white rounded-lg border border-slate-100">
+                <div class="text-[11px] text-slate-400">숙박비</div>
+                <div id="stayCost" class="font-bold text-xs sm:text-sm text-slate-800 mt-0.5">270,000원</div>
+              </div>
+              <div class="p-2.5 bg-white rounded-lg border border-slate-100">
+                <div class="text-[11px] text-slate-400">식비 & 간식</div>
+                <div id="foodCost" class="font-bold text-xs sm:text-sm text-slate-800 mt-0.5">180,000원</div>
+              </div>
+              <div class="p-2.5 bg-white rounded-lg border border-slate-100">
+                <div class="text-[11px] text-slate-400">교통 & 쇼핑</div>
+                <div id="etcCost" class="font-bold text-xs sm:text-sm text-slate-800 mt-0.5">100,000원</div>
+              </div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-3 text-right">* 환율 및 성수기/비수기 시즌에 따라 실제 금액은 차이가 있을 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="checklist" class="bg-slate-900 text-white py-16 sm:py-24">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <span class="text-xs font-bold text-sakura-500 uppercase tracking-widest">Packing & Prep</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">일본 여행 필수 체크리스트</h2>
+          <p class="text-sm text-slate-400 mt-2">출국 전 빠뜨린 것은 없는지 하나씩 체크해보세요!</p>
+          
+          <!-- Progress bar -->
+          <div class="mt-6 max-w-md mx-auto">
+            <div class="flex justify-between text-xs text-slate-300 mb-1.5">
+              <span>준비 완성도</span>
+              <span id="checklistPercent" class="font-bold text-sakura-500">0%</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+              <div id="checklistProgressBar" class="h-full bg-sakura-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="checklistContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- Items will be generated via JavaScript -->
+        </div>
+
+        <div class="mt-8 flex justify-center gap-3">
+          <button onclick="resetChecklist()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+            <i class="fa-solid fa-arrow-rotate-left mr-1.5"></i> 체크리스트 초기화
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar transform scale-95 transition-transform duration-300" id="modalCard">
+      <div class="relative h-64 sm:h-72 w-full overflow-hidden rounded-t-3xl">
+        <img id="modalImg" src="" alt="명소 사진" class="w-full h-full object-cover">
+        <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/75 transition backdrop-blur-md">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+          <span id="modalCityTag" class="px-3 py-1 rounded-full bg-sakura-500 text-white text-xs font-bold shadow">도쿄</span>
+          <button id="modalHeartBtn" onclick="toggleModalBookmark()" class="w-9 h-9 rounded-full bg-white/90 text-slate-700 flex items-center justify-center shadow hover:text-sakura-500 transition">
+            <i class="fa-regular fa-heart"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8">
+        <h3 id="modalTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2">명소 이름</h3>
+        <p id="modalDesc" class="text-sm sm:text-base text-slate-600 leading-relaxed mb-6">상세 설명이 들어갑니다.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs sm:text-sm">
+          <div>
+            <span class="text-slate-400 block text-xs mb-1"><i class="fa-solid fa-location-dot mr-1"></i> 추천 방문 시간 & 팁</span>
+            <span id="modalTip" class="font-medium text-slate-800">일몰 1시간 전 방문 추천</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-xs mb-1"><i class="fa-solid fa-bowl-food mr-1"></i> 주변 추천 먹거리</span>
+            <span id="modalFood" class="font-medium text-slate-800">말차 아이스크림, 야키토리</span>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition">
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="bookmarkDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-heart text-sakura-500"></i>
+        <h3 class="font-bold text-slate-900">내가 저장한 명소</h3>
+      </div>
+      <button onclick="toggleBookmarkDrawer()" class="w-8 h-8 rounded-full text-slate-400 hover:bg-slate-100 flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div id="bookmarkList" class="flex-1 p-5 overflow-y-auto space-y-3 custom-scrollbar">
+      <!-- Bookmarked items injected by JS -->
+    </div>
+
+    <div class="p-4 border-t border-slate-100 bg-slate-50 text-center">
+      <p class="text-xs text-slate-500 mb-2">하트 버튼을 눌러 관심 있는 명소를 담아보세요.</p>
+    </div>
+  </div>
+  <div id="drawerOverlay" onclick="toggleBookmarkDrawer()" class="fixed inset-0 bg-black/40 z-40 hidden backdrop-blur-xs"></div>
+
+  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="w-7 h-7 rounded-full bg-sakura-500 text-white flex items-center justify-center font-bold text-xs">旅</span>
+        <span class="font-display font-bold text-white tracking-tight text-base">TABI JAPAN</span>
+        <span class="text-slate-600">|</span>
+        <span>일본 감성 여행 종합 가이드</span>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <a href="#cities" class="hover:text-white transition">명소 둘러보기</a>
+        <a href="#budget-tool" class="hover:text-white transition">경비 계산기</a>
+        <a href="#checklist" class="hover:text-white transition">체크리스트</a>
+      </div>
+
+      <p class="text-slate-600 text-[11px]">© 2026 TABI Japan Travel Guide. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Destination dataset
+    const placesData = [
+      {
+        id: 1,
+        name: "시부야 스카이 & 스크램블 교차로",
+        city: "tokyo",
+        cityName: "도쿄",
+        tags: ["쇼핑", "힐링"],
+        rating: "4.9",
+        image: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=800&auto=format&fit=crop",
+        desc: "도쿄 전경과 후지산까지 한눈에 조망할 수 있는 옥상 루프탑 전망대입니다. 세계에서 가장 분주한 스크램블 교차로의 활기찬 에너지를 직접 느껴보세요.",
+        tip: "일몰 1시간 전에 예약하면 낮과 노을, 야경을 모두 감상할 수 있습니다.",
+        food: "시부야 미도리스시, 규카츠 모토무라"
+      },
+      {
+        id: 2,
+        name: "아사쿠사 센소지 & 나카미세도리",
+        city: "tokyo",
+        cityName: "도쿄",
+        tags: ["전통", "미식"],
+        rating: "4.8",
+        image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=800&auto=format&fit=crop",
+        desc: "도쿄에서 가장 오래된 고찰로 붉은 카미나리몬 제등과 활기찬 기념품 상점 거리가 여행자를 맞이합니다. 기모노 대여 체험 명소로 유명합니다.",
+        tip: "오전 9시 이전에 방문하면 고즈넉하고 여유롭게 사진을 찍을 수 있습니다.",
+        food: "닝교야키, 메론빵, 아사쿠사 실크 푸딩"
+      },
+      {
+        id: 3,
+        name: "도톤보리 & 글리코상 운하",
+        city: "osaka",
+        cityName: "오사카",
+        tags: ["미식", "쇼핑"],
+        rating: "4.8",
+        image: "https://images.unsplash.com/photo-1590559899731-a372a1464e79?q=80&w=800&auto=format&fit=crop",
+        desc: "‘먹다가 망한다(쿠이다오레)’라는 말이 생길 정도로 풍성한 먹거리가 넘치는 오사카 최대의 번화가입니다. 글리코상 앞 포토존은 필수 코스입니다.",
+        tip: "오사카 주유패스로 무료 이용 가능한 톤보리 리버크루즈를 꼭 탑승해보세요.",
+        food: "타코야키, 오코노미야키, 쿠시카츠(꼬치튀김)"
+      },
+      {
+        id: 4,
+        name: "아라시야마 치쿠린 대나무 숲길",
+        city: "kyoto",
+        cityName: "교토",
+        tags: ["힐링", "전통"],
+        rating: "4.9",
+        image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop",
+        desc: "하늘 높이 솟은 대나무 사이로 비치는 햇살과 바람 소리가 평온함을 주는 교토의 대표적인 명소입니다. 주변의 노노미야 신사와 텐류지도 가깝습니다.",
+        tip: "이른 아침 산책 후 사가노 로맨틱 열차를 타는 루트를 추천합니다.",
+        food: "유바(두부껍질) 요리, % 아라비카 응커피 말차라떼"
+      },
+      {
+        id: 5,
+        name: "후시미 이나리 신사 (천 개의 도리이)",
+        city: "kyoto",
+        cityName: "교토",
+        tags: ["전통", "힐링"],
+        rating: "4.9",
+        image: "https://images.unsplash.com/photo-1478436127897-769e00d7c0f3?q=80&w=800&auto=format&fit=crop",
+        desc: "영화 <게이샤의 추억>의 배경으로 유명한 붉은 도리이 터널입니다. 산 전체가 신성한 영역으로 여겨지며 여우 신의 조각상이 곳곳에 있습니다.",
+        tip: "24시간 무료 개방이므로 새벽이나 해 질 무렵 방문하면 신비로운 분위기를 느낄 수 있습니다.",
+        food: "이나리즈시(유부초밥), 여우 전병"
+      },
+      {
+        id: 6,
+        name: "후쿠오카 나카스 야타이 거리",
+        city: "fukuoka",
+        cityName: "후쿠오카",
+        tags: ["미식", "힐링"],
+        rating: "4.6",
+        image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=800&auto=format&fit=crop",
+        desc: "나카스 강변을 따라 늘어선 포장마차(야타이)에서 현지인들과 어깨를 맞대고 진한 돈코츠 라멘과 명란 구이에 하이볼을 즐기는 밤문화의 정수입니다.",
+        tip: "현금 결제가 기본인 곳이 많으니 소액 엔화 지폐나 동전을 준비하세요.",
+        food: "하카타 돈코츠 라멘, 명란 계란말이, 야키토리"
+      },
+      {
+        id: 7,
+        name: "삿포로 오도리 공원 & 시계탑",
+        city: "sapporo",
+        cityName: "삿포로",
+        tags: ["힐링", "미식"],
+        rating: "4.7",
+        image: "https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=800&auto=format&fit=crop",
+        desc: "삿포로 도심 중심부를 관통하는 녹지대이자 겨울 눈축제, 여름 맥주 축제의 무대입니다. 홋카이도의 깨끗한 대자연과 미식을 만끽할 수 있습니다.",
+        tip: "오도리 공원 벤치에서 홋카이도 구운 옥수수와 우유 아이스크림을 맛보세요.",
+        food: "삿포로 미소라멘, 징기스칸 양고기, 수프카레"
+      },
+      {
+        id: 8,
+        name: "오사카성 천수각 & 니시노마루 정원",
+        city: "osaka",
+        cityName: "오사카",
+        tags: ["전통", "힐링"],
+        rating: "4.7",
+        image: "https://images.unsplash.com/photo-1565011749733-41c3bf795be2?q=80&w=800&auto=format&fit=crop",
+        desc: "웅장한 돌벽과 해자로 둘러싸인 오사카의 상징적인 랜드마크입니다. 봄 벚꽃 시즌과 가을 단풍철에는 황홀한 풍경을 자랑합니다.",
+        tip: "천수각 전망대에서 오사카 시내를 360도로 조망할 수 있습니다.",
+        food: "성 입구 말차 소프트크림, 타코센베"
+      },
+      {
+        id: 9,
+        name: "긴자 럭셔리 스트리트 & 도쿄역",
+        city: "tokyo",
+        cityName: "도쿄",
+        tags: ["쇼핑", "미식"],
+        rating: "4.8",
+        image: "https://images.unsplash.com/photo-1538991383142-36c4edeaffde?q=80&w=800&auto=format&fit=crop",
+        desc: "유서 깊은 백화점들과 명품 플래그십 스토어가 늘어선 긴자와 붉은 벽돌의 고풍스러운 도쿄역 마루노우치 광장을 산책해보세요.",
+        tip: "주말에는 '보행자 천국'이 열려 차 없는 긴자 대로를 자유롭게 걸을 수 있습니다.",
+        food: "긴자 렌가테이(경양식 돈가스), 키무라야 단팥빵"
+      }
+    ];
+
+    // Travel Preparation Checklist items
+    const checklistItems = [
+      { id: "c1", title: "Visit Japan Web 입국심사·세관신고 QR코드 발급", desc: "출국 전 사전 등록으로 일본 공항 입국 심사 시간 대폭 단축" },
+      { id: "c2", title: "여권 유효기간 확인 (최소 6개월 이상 권장)", desc: "훼손이나 서명 누락 여부도 함께 점검" },
+      { id: "c3", title: "110V 돼지코(변환 어댑터) & 멀티탭", desc: "일본은 110V 전압을 사용하므로 변환 플러그 필수" },
+      { id: "c4", title: "eSIM / 포켓와이파이 / 유심 구매", desc: "구글 지도 및 번역기 사용을 위한 데이터 필수" },
+      { id: "c5", title: "스이카(Suica) 또는 이코카(ICOCA) 교통카드", desc: "지하철, 편의점, 자판기까지 터치 한 번으로 결제" },
+      { id: "c6", title: "해외 결제 수수료 무료 카드 (트래블로그/트래블월렛)", desc: "엔화 무료 환전 및 현지 세븐일레븐 ATM 출금 편리" },
+      { id: "c7", title: "비상용 엔화 현금 소액 환전", desc: "소규모 라멘집, 야타이(포장마차), 신사 자판기 현금 전용 대비" },
+      { id: "c8", title: "해외 여행자 보험 가입", desc: "갑작스러운 질병, 부상 및 항공편 지연/수하물 파손 대비" },
+      { id: "c9", title: "보조배터리 (기내 수하물 소지)", desc: "배터리 위탁 수하물 금지, 지도 검색 시 배터리 소모 빠름" },
+      { id: "c10", title: "편안한 운동화", desc: "하루 평균 15,000~20,000보 이상 걷게 되는 여행 필수템" }
+    ];
+
+    let currentCityFilter = "all";
+    let currentTagFilter = "all";
+    let activeModalItem = null;
+    let bookmarks = JSON.parse(localStorage.getItem('tabi_bookmarks') || '[]');
+    let checklistChecked = JSON.parse(localStorage.getItem('tabi_checklist') || '{}');
+  </script>
+
+  <script>
+    function renderPlaces() {
+      const grid = document.getElementById('placesGrid');
+      grid.innerHTML = '';
+
+      const filtered = placesData.filter(place => {
+        const matchCity = currentCityFilter === 'all' || place.city === currentCityFilter;
+        const matchTag = currentTagFilter === 'all' || place.tags.includes(currentTagFilter);
+        return matchCity && matchTag;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-400">
+            <i class="fa-regular fa-compass text-4xl mb-3 block"></i>
+            <p>조건에 맞는 추천 여행지가 없습니다.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(place => {
+        const isBookmarked = bookmarks.includes(place.id);
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl overflow-hidden card-shadow border border-slate-100 flex flex-col transition duration-300 group";
+
+        card.innerHTML = `
+          <div class="relative h-52 overflow-hidden bg-slate-100">
+            <img src="${place.image}" 
+                 alt="${place.name}" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                 loading="lazy"
+                 onerror="this.src='https://placehold.co/600x400/f1f5f9/475569?text=${encodeURIComponent(place.cityName)}'">
+            <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-xs font-semibold">
+              ${place.cityName}
+            </div>
+            <button onclick="toggleBookmark(${place.id}, event)" 
+                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-sakura-500 shadow-sm transition">
+              <i class="${isBookmarked ? 'fa-solid text-sakura-500' : 'fa-regular'} fa-heart"></i>
+            </button>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-1.5 mb-2">
+                ${place.tags.map(tag => `<span class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">#${tag}</span>`).join('')}
+                <span class="ml-auto text-xs font-bold text-amber-500 flex items-center gap-1">
+                  <i class="fa-solid fa-star"></i> ${place.rating}
+                </span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-base mb-1.5 line-clamp-1">${place.name}</h3>
+              <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${place.desc}</p>
+            </div>
+
+            <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 truncate max-w-[170px]">
+                <i class="fa-solid fa-utensils mr-1"></i>${place.food.split(',')[0]}
+              </span>
+              <button onclick="openModal(${place.id})" class="text-xs font-bold text-sakura-500 hover:text-sakura-600 flex items-center gap-1">
+                상세보기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterByCity(city) {
+      currentCityFilter = city;
+      document.querySelectorAll('.quick-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === city) {
+          btn.classList.add('bg-white', 'text-slate-900');
+          btn.classList.remove('bg-white/20', 'text-white');
+        } else {
+          btn.classList.remove('bg-white', 'text-slate-900');
+          btn.classList.add('bg-white/20', 'text-white');
+        }
+      });
+      renderPlaces();
+      // Scroll smoothly to destinations section if clicked from hero
+      const target = document.getElementById('cities');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function filterByTag(tag) {
+      currentTagFilter = tag;
+      document.querySelectorAll('.tag-btn').forEach(btn => {
+        if ((tag === 'all' && btn.innerText.includes('전체')) || btn.innerText.includes(tag)) {
+          btn.classList.add('bg-slate-900', 'text-white');
+          btn.classList.remove('bg-slate-100', 'text-slate-600');
+        } else {
+          btn.classList.remove('bg-slate-900', 'text-white');
+          btn.classList.add('bg-slate-100', 'text-slate-600');
+        }
+      });
+      renderPlaces();
+    }
+
+    function quickSelectTheme(city) {
+      filterByCity(city);
+    }
+  </script>
+
+  <script>
+    function openModal(id) {
+      const place = placesData.find(p => p.id === id);
+      if (!place) return;
+      activeModalItem = place;
+
+      document.getElementById('modalImg').src = place.image;
+      document.getElementById('modalCityTag').innerText = place.cityName;
+      document.getElementById('modalTitle').innerText = place.name;
+      document.getElementById('modalDesc').innerText = place.desc;
+      document.getElementById('modalTip').innerText = place.tip;
+      document.getElementById('modalFood').innerText = place.food;
+
+      updateModalHeart();
+
+      const modal = document.getElementById('detailModal');
+      const card = document.getElementById('modalCard');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('detailModal');
+      const card = document.getElementById('modalCard');
+      modal.classList.add('opacity-0');
+      card.classList.remove('scale-100');
+      card.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    function updateModalHeart() {
+      if (!activeModalItem) return;
+      const isBookmarked = bookmarks.includes(activeModalItem.id);
+      const heartIcon = document.querySelector('#modalHeartBtn i');
+      if (isBookmarked) {
+        heartIcon.className = "fa-solid fa-heart text-sakura-500";
+      } else {
+        heartIcon.className = "fa-regular fa-heart text-slate-700";
+      }
+    }
+
+    function toggleModalBookmark() {
+      if (!activeModalItem) return;
+      toggleBookmark(activeModalItem.id);
+      updateModalHeart();
+    }
+
+    function toggleBookmark(id, event) {
+      if (event) event.stopPropagation();
+      const index = bookmarks.indexOf(id);
+      if (index > -1) {
+        bookmarks.splice(index, 1);
+      } else {
+        bookmarks.push(id);
+      }
+      localStorage.setItem('tabi_bookmarks', JSON.stringify(bookmarks));
+      updateBookmarkBadge();
+      renderPlaces();
+      renderBookmarksDrawer();
+    }
+
+    function updateBookmarkBadge() {
+      const badge = document.getElementById('bookmarkBadge');
+      if (bookmarks.length > 0) {
+        badge.innerText = bookmarks.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function toggleBookmarkDrawer() {
+      const drawer = document.getElementById('bookmarkDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      const isOpen = !drawer.classList.contains('translate-x-full');
+
+      if (isOpen) {
+        drawer.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+      } else {
+        renderBookmarksDrawer();
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+      }
+    }
+
+    function renderBookmarksDrawer() {
+      const container = document.getElementById('bookmarkList');
+      container.innerHTML = '';
+
+      if (bookmarks.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 text-slate-400">
+            <i class="fa-regular fa-heart text-3xl mb-2 text-slate-300"></i>
+            <p class="text-xs">저장된 여행지가 없습니다.<br>마음에 드는 명소의 하트를 눌러보세요!</p>
+          </div>
+        `;
+        return;
+      }
+
+      bookmarks.forEach(id => {
+        const place = placesData.find(p => p.id === id);
+        if (!place) return;
+        const item = document.createElement('div');
+        item.className = "flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 transition";
+        item.innerHTML = `
+          <img src="${place.image}" class="w-14 h-14 rounded-lg object-cover" alt="${place.name}">
+          <div class="flex-1 min-w-0">
+            <h5 class="text-xs font-bold text-slate-800 truncate">${place.name}</h5>
+            <span class="text-[11px] text-sakura-500 font-medium">${place.cityName}</span>
+          </div>
+          <button onclick="toggleBookmark(${place.id})" class="text-slate-400 hover:text-red-500 p-1.5" title="삭제">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+  </script>
+
+  <script>
+    const jpyInput = document.getElementById('jpyInput');
+    const krwOutput = document.getElementById('krwOutput');
+    const rateSlider = document.getElementById('rateSlider');
+    const rateLabel = document.getElementById('rateLabel');
+    const customRateDisplay = document.getElementById('customRateDisplay');
+
+    function updateCurrency() {
+      const jpyVal = parseFloat(jpyInput.value) || 0;
+      const rate = parseFloat(rateSlider.value); // rate for 100 JPY
+      rateLabel.innerText = rate;
+      customRateDisplay.innerText = rate + " 원";
+
+      const krwVal = Math.round((jpyVal * rate) / 100);
+      krwOutput.value = krwVal.toLocaleString();
+    }
+
+    jpyInput.addEventListener('input', updateCurrency);
+    rateSlider.addEventListener('input', () => {
+      updateCurrency();
+      calculateTripBudget();
+    });
+
+    function calculateTripBudget() {
+      const days = parseInt(document.getElementById('budgetDays').value, 10);
+      const style = document.getElementById('budgetStyle').value;
+      const rate = parseFloat(rateSlider.value) / 100; // per 1 JPY rate
+
+      let baseFlight = 300000;
+      let dailyHotel = 90000; // in KRW
+      let dailyFood = 45000;
+      let dailyEtc = 25000;
+
+      if (style === 'budget') {
+        baseFlight = 250000;
+        dailyHotel = 60000;
+        dailyFood = 35000;
+        dailyEtc = 15000;
+      } else if (style === 'luxury') {
+        baseFlight = 450000;
+        dailyHotel = 200000;
+        dailyFood = 90000;
+        dailyEtc = 50000;
+      }
+
+      // Adjust with current exchange rate ratio to default 9.1
+      const rateRatio = rate / 9.1;
+      const hotelTotal = Math.round(dailyHotel * (days - 1) * rateRatio);
+      const foodTotal = Math.round(dailyFood * days * rateRatio);
+      const etcTotal = Math.round(dailyEtc * days * rateRatio);
+      const grandTotal = baseFlight + hotelTotal + foodTotal + etcTotal;
+
+      document.getElementById('flightCost').innerText = baseFlight.toLocaleString() + '원';
+      document.getElementById('stayCost').innerText = hotelTotal.toLocaleString() + '원';
+      document.getElementById('foodCost').innerText = foodTotal.toLocaleString() + '원';
+      document.getElementById('etcCost').innerText = etcTotal.toLocaleString() + '원';
+      document.getElementById('totalBudgetKrw').innerText = '약 ' + grandTotal.toLocaleString();
+    }
+  </script>
+
+  <script>
+    function renderChecklist() {
+      const container = document.getElementById('checklistContainer');
+      container.innerHTML = '';
+
+      let checkedCount = 0;
+
+      checklistItems.forEach(item => {
+        const isChecked = !!checklistChecked[item.id];
+        if (isChecked) checkedCount++;
+
+        const div = document.createElement('div');
+        div.className = `p-4 rounded-xl border transition cursor-pointer select-none flex items-start gap-3 ${
+          isChecked 
+            ? 'bg-slate-800/90 border-sakura-500/60' 
+            : 'bg-slate-800/40 border-slate-700/60 hover:border-slate-600'
+        }`;
+        div.onclick = () => toggleChecklistItem(item.id);
+
+        div.innerHTML = `
+          <div class="w-5 h-5 rounded mt-0.5 flex items-center justify-center text-xs transition ${
+            isChecked ? 'bg-sakura-500 text-white' : 'border border-slate-600 bg-slate-700/50 text-transparent'
+          }">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h5 class="text-sm font-semibold text-slate-100 ${isChecked ? 'line-through text-slate-400' : ''}">${item.title}</h5>
+            <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">${item.desc}</p>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      // Update progress bar
+      const percent = Math.round((checkedCount / checklistItems.length) * 100);
+      document.getElementById('checklistPercent').innerText = percent + '%';
+      document.getElementById('checklistProgressBar').style.width = percent + '%';
+    }
+
+    function toggleChecklistItem(id) {
+      checklistChecked[id] = !checklistChecked[id];
+      localStorage.setItem('tabi_checklist', JSON.stringify(checklistChecked));
+      renderChecklist();
+    }
+
+    function resetChecklist() {
+      checklistChecked = {};
+      localStorage.removeItem('tabi_checklist');
+      renderChecklist();
+    }
+
+    // Modal background click dismissal
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target.id === 'detailModal') {
+        closeModal();
+      }
+    });
+
+    // Keyboard ESC dismissal for modals
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        const drawer = document.getElementById('bookmarkDrawer');
+        if (!drawer.classList.contains('translate-x-full')) {
+          toggleBookmarkDrawer();
+        }
+      }
+    });
+
+    // Initial load execution
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPlaces();
+      updateCurrency();
+      calculateTripBudget();
+      renderChecklist();
+      updateBookmarkBadge();
+    });
+  </script>
+</body>
+</html>
